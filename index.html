@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Be My Star!</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      background: linear-gradient(135deg, #9ebb95 0%, #d3d394 100%);
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      text-align: center;
+      padding-top: 40px;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    .welcome {
+      font-size: 2.2em;
+      font-weight: bold;
+      background: linear-gradient(90deg, #ccaa11, #cba451, #82bf418e);
+      background-size: 200% auto;
+      color: #fff;
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: bounceIn 1.2s, rainbow 3s linear infinite 1.2s;
+      margin-bottom: 18px;
+      letter-spacing: 2px;
+    }
+    @keyframes rainbow {
+      to { background-position: 200% center; }
+    }
+    @keyframes bounceIn {
+      0% { opacity: 0; transform: scale(0.5);}
+      60% { opacity: 1; transform: scale(1.2);}
+      80% { transform: scale(0.95);}
+      100% { transform: scale(1);}
+    }
+    .subtitle {
+      font-size: 1.2em;
+      font-weight: bold;
+      background: linear-gradient(90deg, #ccaa11, #cba451, #82bf418e);
+      background-size: 200% auto;
+      color: #fff;
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 30px;
+      opacity: 0;
+      animation: fadeIn 2s 1.2s forwards, rainbow 3s linear infinite 3s;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(40px);}
+      to { opacity: 1; transform: translateY(0);}
+    }
+    .flower {
+      width: 120px;
+      margin: 0 auto 18px auto;
+      display: block;
+      animation: spin 5s linear infinite, pulse 2s infinite alternate;
+      filter: drop-shadow(0 8px 24px #9cb3506e);
+    }
+    @keyframes spin {
+      100% { transform: rotate(360deg);}
+    }
+    @keyframes pulse {
+      0% { transform: scale(1);}
+      100% { transform: scale(1.12);}
+    }
+    .form-maba {
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 2px 16px #e7548022;
+      padding: 28px 22px 20px 22px;
+      margin: 0 auto 28px auto;
+      max-width: 320px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      border: none;
+      position: relative;
+      z-index: 1;
+    }
+    .form-maba input,
+    .form-maba select {
+      padding: 12px 16px;
+      border-radius: 12px;
+      border: 1.5px solid #ececec;
+      font-size: 1em;
+      background: #fafbfc;
+      color: #333;
+      box-shadow: none;
+      outline: none;
+      transition: border 0.2s, box-shadow 0.2s;
+      margin-bottom: 0;
+    }
+    .form-maba input:focus,
+    .form-maba select:focus {
+      border: 1.5px solid #7b2ff2;
+      background: #f5f3ff;
+    }
+    .form-maba .input-icon,
+    .form-maba .select-icon {
+      display: none;
+    }
+    .form-maba select {
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url('data:image/svg+xml;utf8,<svg fill="gray" height="18" viewBox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      background-size: 18px;
+    }
+    .btn {
+      background: linear-gradient(90deg, #a6b42c83 60%, #b0cf2982 100%);
+      color: white;
+      border: none;
+      border-radius: 16px;
+      padding: 12px 0;
+      font-size: 1.08em;
+      cursor: pointer;
+      margin-top: 8px;
+      box-shadow: 0 2px 8px #e7548033;
+      transition: background 0.3s, transform 0.2s;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      width: 100%;
+    }
+    .btn:hover {
+      background: linear-gradient(90deg, #da9310 60%, #9d7d1f 100%);
+      transform: scale(1.04);
+    }
+    /* Confetti */
+    .confetti {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      pointer-events: none;
+      z-index: 9999;
+    }
+    .confetti-piece {
+      position: absolute;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%; 
+      opacity: 0.92;
+      box-shadow: 0 6px 18px #0002;
+      animation: balloon-float 2.8s cubic-bezier(.62,.04,.36,1.04) forwards;
+      will-change: transform, opacity;
+      z-index: 10000;
+      border: 2px solid #fff7;
+      overflow: visible;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+    }
+    .confetti-highlight {
+      position: absolute;
+      left: 8px;
+      top: 8px;
+      width: 10px;
+      height: 16px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.55);
+      filter: blur(0.5px);
+      opacity: 0.8;
+      pointer-events: none;
+    }
+    .confetti-string {
+      position: absolute;
+      left: 50%;
+      top: 92%;
+      width: 2px;
+      height: 22px;
+      background: linear-gradient(to bottom, #aaa 60%, #fff0 100%);
+      border-radius: 8px 8px 16px 16px;
+      transform: translateX(-50%) skewX(-10deg);
+      opacity: 0.7;
+      z-index: -1;
+    }
+    @keyframes balloon-float {
+      0% {
+        transform: translateY(100vh) scale(0.8) rotateZ(var(--rotate));
+        opacity: 0.7;
+      }
+      20% {
+        opacity: 1;
+      }
+      80% {
+        transform: translateY(-10vh) scale(1.05) rotateZ(calc(var(--rotate) + 10deg));
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-30vh) scale(1) rotateZ(calc(var(--rotate) + 20deg));
+        opacity: 0;
+      }
+    }
+    .custom-alert {
+      display: none;
+      position: fixed;
+      z-index: 10000;
+      left: 0; top: 0; width: 100vw; height: 100vh;
+      background: rgba(255,192,203,0.25);
+      align-items: center;
+      justify-content: center;
+      transition: background 0.3s;
+    }
+    .alert-box {
+      background: #fff0fa;
+      border-radius: 30px;
+      box-shadow: 0 8px 32px #e7548055;
+      padding: 36px 32px 28px 32px;
+      text-align: center;
+      min-width: 260px;
+      transform: scale(0.7);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(.68,-0.55,.27,1.55);
+    }
+    .alert-box.show {
+      transform: scale(1.1);
+      opacity: 1;
+    }
+    .alert-emoji {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+      animation: emojiPop 1s infinite alternate;
+    }
+    @keyframes emojiPop {
+      from { transform: scale(1);}
+      to { transform: scale(1.2);}
+    }
+    .alert-message {
+      font-size: 1.15em;
+      color: #e75480;
+      margin-bottom: 18px;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+    .alert-ok {
+      background: #e75480;
+      color: #fff;
+      border: none;
+      border-radius: 20px;
+      padding: 8px 28px;
+      font-size: 1em;
+      cursor: pointer;
+      font-weight: bold;
+      box-shadow: 0 2px 8px #e7548033;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .alert-ok:hover {
+      background: #c94f7c;
+      transform: scale(1.08);
+    }
+  </style>
+</head>
+<body>
+  <div class="welcome">⭐ Hi, Wanna See A Star? ⭐</div>
+  <div class="subtitle">Help me to find the star by input your name!</div>
+  <form action="" class="form-maba" onsubmit="event.preventDefault(); showConfetti();">
+    <select name="" id="nama" aria-required="">
+ <option value="" disabled selected>Select Your Name</option>
+ <option>Zhafran Izzi</option>
+    </select>
+    <select name="" id="jurusan"> required>
+<option value="" disabled selected>Where Are You From?</option>   
+<option>Planet B</option>
+    </select>
+    <button class="btn" type="submit">Let's See The Star!</button>
+  </form>
+
+  <div class="confetti" id="confetti"></div>
+  <div class="custom-alert" id="customAlert">
+    <div class="alert-box">
+      <div class="alert-emoji">✨✨</div>
+      <div class="alert-message" id="alertMsg">Now You Can See The Star, And It's YOU!</div>
+      <button class="alert-ok" onclick="closeAlert()">Now You Can See The Star, And It's YOU!</button>
+    </div>
+  </div>
+   <img class="flower" src="https://i.pinimg.com/736x/f8/e7/4c/f8e74c6723c7e0b665bc9e29a57c93a8.jpg" alt="">
+  <script>
+    function showConfetti() {
+      const nama = document.getElementById('nama').value;
+      const jurusan = document.getElementById('jurusan').value;
+      const msg = document.getElementById('alertMsg');
+     msg.innerHTML = `Hi <span style="color:#7b2ff2">${nama}</span> from <span style="color:#e75480">${jurusan}</span>!<br>Thank you for your existence, you mean a lot! <br> Live your life happily, I'm super proud of you, everyone is proud of you. 
+     <br> Always take care of yourself, because you make everything around you brighter. <br> You're effortlessly amazing, that's why I cherish you.`;
+      showAlert();
+      const confetti = document.getElementById('confetti');
+      confetti.innerHTML = '';
+      const colors = [
+        "#e75480", "#7b2ff2", "#00c6fb", "#f9d423", "#ff6a00", "#43e97b", "#ffb3e6", "#baffc9"
+      ];
+      for (let i = 0; i < 18; i++) {
+        const el = document.createElement('div');
+        el.className = 'confetti-piece';
+        el.style.left = Math.random() * 90 + 5 + 'vw';
+        el.style.background = colors[Math.floor(Math.random() * colors.length)];
+        el.style.setProperty('--rotate', `${Math.random() * 40 - 20}deg`);
+        el.style.animationDelay = (Math.random() * 0.5) + 's';
+
+        const highlight = document.createElement('div');
+        highlight.className = 'confetti-highlight';
+        el.appendChild(highlight);
+
+        const string = document.createElement('div');
+        string.className = 'confetti-string';
+        el.appendChild(string);
+
+        confetti.appendChild(el);
+      }
+      setTimeout(() => confetti.innerHTML = '', 3000);
+    }
+    function showAlert() {
+      document.getElementById('customAlert').style.display = 'flex';
+      setTimeout(() => {
+        document.querySelector('.alert-box').classList.add('show');
+      }, 10);
+    }
+    function closeAlert() {
+      document.querySelector('.alert-box').classList.remove('show');
+      setTimeout(() => {
+        document.getElementById('customAlert').style.display = 'none';
+      }, 300);
+    }
+  </script>
+</body>
+</html>
